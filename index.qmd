@@ -1,7 +1,7 @@
 ---
 title: "&#8203;"
 title-slide-attributes:
-    data-background-image: imgs\title-slide.svg
+    data-background-image: imgs/title.png
     data-background-size: contain
     data-background-opacity: "1.0"
 author: "&#8203;"
@@ -430,11 +430,9 @@ e depois definir em que nível de diferença dos valores da sigmóide vamos sepa
 
 ## Classificação
 
-\$\$ 
-
+$$ 
 \sigma(\mathbf{x}) = \frac{1}{1 + e^{-(w^T \mathbf{x} + b)}}
-
-\$\$
+$$
 
 ## Aprendizado supervisionado
 
@@ -775,49 +773,454 @@ Time Series Air **Quality**
 
 - [Jax](https://docs.jax.dev/en/latest/quickstart.html)
 
-
-## Transformers
-
-## Aplicações de Transformers
-
 ## Inteligência Artificial Generativa
+
+![IA Generativa](imgs/generativeai.png)
+
+
+::: notes
+Chegamos então à Inteligência Artificial Generativa (Generative AI). Esta é uma subárea da IA focada na criação de modelos capazes de gerar conteúdo novo e original que se assemelha aos dados com os quais foram treinados. Em vez de apenas classificar ou prever (IA discriminativa), a IA generativa cria. Isso pode incluir texto, imagens, música, código, vídeos, designs, estruturas moleculares, e mais. Ela aprende os padrões e a estrutura subjacente dos dados de treinamento e usa esse conhecimento para produzir novas amostras.
+:::
 
 ## O que é Generative AI?
 
+ - Objetivo: Aprender a distribuição de probabilidade dos dados de treinamento $P(\mathbf{x})$.
+ - Tarefa: Gerar novas amostras $\mathbf{x}_{novo} \sim P(\mathbf{x})$ que sejam realistas e diversas.
+
+
+## O que é Generative AI?
+
+ - Diferença para IA Discriminativa:
+    - Discriminativa (ex: Classificação): Aprende $P(y|\mathbf{x})$ - a probabilidade da classe $y$ dado a entrada $\mathbf{x}$. Foco em mapear entrada para saída.
+    - Generativa: Aprende $P(\mathbf{x})$ (ou $P(\mathbf{x}, y)$). Foco em entender como os dados são gerados.
+Tecnologias Chave: LLMs (Transformers), Modelos de Difusão, GANs, VAEs.
+
+::: notes
+Formalmente, o objetivo da IA Generativa é aprender a distribuição de probabilidade dos dados de treinamento. Uma vez que o modelo aprendeu essa distribuição, ele pode "amostrar" dela para gerar novos dados que pareçam vir da mesma distribuição. Isso contrasta com modelos discriminativos, que aprendem a separar diferentes tipos de dados (ex: classificar emails como spam ou não spam) aprendendo a fronteira de decisão entre eles, sem necessariamente saber como gerar um email de spam ou não spam. As tecnologias mais proeminentes hoje para IA Generativa incluem LLMs (baseados em Transformers), Modelos de Difusão e GANs.
+:::
+
+## Transformers
+
+![Transformer](imgs/transformer.png)
+
+::: notes
+A arquitetura Transformer, introduzida no paper "Attention Is All You Need" (2017), revolucionou o processamento de linguagem natural e se expandiu para outras áreas. Sua principal inovação é o mecanismo de auto-atenção (self-attention). Diferente das RNNs que processam sequências passo a passo (o que limita a paralelização e dificulta capturar dependências longas), a atenção permite que o modelo pondere a importância de todas as outras palavras na sequência ao processar uma palavra específica, independentemente da distância. Isso permite capturar relações de longo alcance de forma eficiente e processar a sequência em paralelo, levando a treinamentos mais rápidos e modelos mais poderosos.
+:::
+
+## Completação
+
+Hoje acordei e
+
+## Completação
+
+\[Hoje\] \[acordei\] \[e\]
+
+## Completação
+
+\[Hoje\] \[acordei\] \[e\]
+
+\[caí \] .9
+
+\[ \] 0.01
+
+\[ levantei \] 0.008
+
+
+## Completação
+
+\[Hoje\] \[acordei\] \[e\] \[caí \]
+
+## Completação
+
+\[Hoje\] \[acordei\] \[e\] \[caí \]
+
+\[da \]  0.8
+
+\[pizza \] 0.1
+
+\[ gato \] 0.1
+
+## Tokenização
+
+"O mundo é redondo, mas está ficando cada mais quadrado."
+
+## Byte Pair Encoding - Passo 1
+
+Primeiro, dividimos o texto em palavras e adicionamos um símbolo especial ao final de cada palavra (por exemplo, </w> para indicar o fim da palavra):
+
+"O</w> mundo</w> é</w> redondo,</w> mas</w> está</w> ficando</w> cada</w> mais</w> quadrado.</w>
+"
+
+## Byte Pair Encoding - Passo 2
+
+Cada palavra é decomposta em caracteres (incluindo o símbolo de fim de palavra):
+
+O </w>
+
+m u n d o </w>
+
+é </w>
+
+r e d o n d o , </w>
+
+m a s </w>
+
+e s t á </w>
+
+f i c a n d o </w>
+
+c a d a </w>
+
+m a i s </w>
+
+q u a d r a d o . </w>
+
+
+## Byte Pair Encoding - Passo 3
+
+Agora, contamos todos os pares de caracteres adjacentes mais frequentes em todas as palavras. Exemplo: "m u", "u n", "n d", "d o" em "mundo".
+
+## Byte Pair Encoding - Passo 4
+
+Unimos o par mais frequente em um novo símbolo. Por exemplo, se "a s" aparece muito, vira "as". Repetimos esse processo várias vezes.
+
+Exemplo de iterações (simplificado):
+
+Iteração 1: "a s" → "as"
+
+Iteração 2: "m a" → "ma"
+
+Iteração 3: "n d" → "nd"
+
+Iteração 4: "d o" → "do"
+...
+
+
+## Byte Pair Encoding - Passo 5
+
+Depois de várias junções, as palavras originais são representadas como sequências de subpalavras ou tokens BPE.
+
+Exemplo (imaginando algumas junções):
+
+"quadrado" pode virar: ["qua", "dra", "do", ". </w>"]
+
+"ficando" pode virar: ["fi", "can", "do", "</w>"]
+
+"redondo" pode virar: ["re", "don", "do", ", </w>"]
+
+## Raízes das palavras
+
+feliz → ["feliz"]
+
+felicidade → ["feli", "cidade"]
+
+infeliz → ["in", "feliz"]
+
+infelicidade → ["in", "feli", "cidade"]
+
+felizmente → ["feliz", "mente"]
+
+infelizmente → ["in", "feliz", "mente"]
+
+superfeliz → ["super", "feliz"]
+
+## Embeddings
+
+| O   | mun | do | é | re | don | do , | mas | es | tá | fi | can | do | ca | da | vez | mais | qua | dra | do . | ... |
+|-----|-----|----|---|----|-----|------|-----|----|----|----|-----|----|----|----|-----|------|-----|-----|------|-----|
+| 0.3 | 0.2 | 0.4|0.2|0.6 | 0.5 | 0.3  | 0.4 |0.2 |0.5 |0.7 |0.3  |0.2 |0.4 |0.5 |0.6  | 0.9  |0.5  |0.4  |0.3   | ... |
+| 0.7 | 0.8 | 0.1|0.9|0.3 | 0.7 | 0.2  | 0.8 |0.7 |0.2 |0.1 |0.8  |0.5 |0.3 |0.1 |0.2  | 0.1  |0.4  |0.2  |0.7   | ... |
+| 0.2 | 0.4 | 0.3|0.7|0.7 | 0.6 | 0.8  | 0.6 |0.9 |0.4 |0.4 |0.2  |0.8 |0.7 |0.6 |0.9  | 0.4  |0.2  |0.5  |0.8   | ... |
+| 0.5 | 0.1 | 0.7|0.1|0.2 | 0.3 | 0.4  | 0.2 |0.6 |0.1 |0.6 |0.5  |0.1 |0.8 |0.7 |0.1  | 0.8  |0.7  |0.3  |0.2   | ... |
+
+
+
+
+## Embeddings
+
+- Cada token é representado por um vetor
+
+[Projector TensorFlow](https://projector.tensorflow.org)
+
+::: notes
+Embeddings são representações vetoriais densas e de baixa dimensão de itens discretos, como palavras, usuários, produtos ou até mesmo nós em um grafo. Em vez de representar uma palavra com um vetor esparso enorme (one-hot encoding), usamos um vetor denso de números reais (ex: 300 dimensões). Esses vetores são aprendidos (geralmente por redes neurais como Word2Vec, GloVe, ou como parte de modelos maiores como Transformers) de forma que itens semanticamente similares tenham vetores próximos no espaço vetorial. Por exemplo, os vetores para "rei" e "rainha" estarão próximos, e a relação entre "rei" e "rainha" pode ser similar à relação entre "homem" e "mulher" (capturada por operações vetoriais). Embeddings são fundamentais para que modelos de ML/DL processem dados categóricos e textuais de forma eficaz. O TensorFlow Embedding Projector é uma ferramenta fantástica para visualizar esses espaços vetoriais.
+:::
+
+## Tradução
+
+![https://jalammar.github.io/illustrated-transformer/](https://jalammar.github.io/images/t/The_transformer_encoders_decoders.png)
+
+## Detalhando
+
+![https://jalammar.github.io/illustrated-transformer/](https://jalammar.github.io/images/t/The_transformer_encoder_decoder_stack.png)
+
+## Encoder
+
+![https://jalammar.github.io/illustrated-transformer/](https://jalammar.github.io/images/t/Transformer_encoder.png)
+
+## Arquitetura transformers
+
+![Arquitetura](imgs/diagrama-7.webp)
+
+## Aplicações de Transformers
+
+- Processamento de Linguagem Natural (NLP):
+    - Tradução Automática (Google Translate)
+    - Geração de Texto (GPT, Gemini, Llama, Claude - base das LLMs)
+    - Sumarização de Texto
+    - Respondendo Perguntas (Question Answering)
+    - Análise de Sentimento
+    - Classificação de Texto
+
+## Aplicações de Transformers
+
+- Visão Computacional:
+    - Classificação de Imagens (Vision Transformer - ViT)
+    - Detecção de Objetos (DETR)
+    - Segmentação de Imagens
+    - Geração de Imagens (a partir de texto, combinado com outras técnicas)
+
+## Aplicações de Transformers
+
+- Outras Áreas:
+    - Previsão de Séries Temporais
+    - Bioinformática (AlphaFold - previsão de estrutura de proteínas)
+    - Sistemas de Recomendação
+    - Processamento de Áudio
+
+
 ## LLMs (Large Language Models)
 
-## Modelos de Difusão
+- Definição: Modelos de linguagem baseados em Transformers com bilhões (ou trilhões) de parâmetros, treinados em quantidades massivas de texto (internet, livros, etc.).
+
+## LLMs (Large Language Models)
+
+
+- Capacidades:
+    - Compreensão e geração de texto coerente e contextualmente relevante.
+    - Tradução, sumarização, resposta a perguntas.
+    - Raciocínio (limitado), escrita criativa, geração de código.
+    - Few-shot / Zero-shot learning: Capacidade de realizar tarefas para as quais não foram explicitamente treinados, apenas com base na descrição da tarefa ou poucos exemplos no prompt.
+
+## LLMs (Large Language Models)
+
+- Exemplos: GPT-4 (OpenAI), Gemini (Google), Llama 3 (Meta), Claude 3 (Anthropic).
+
+::: notes
+Os Large Language Models (LLMs) são talvez o exemplo mais conhecido de IA Generativa atualmente. São essencialmente modelos Transformer escalados para tamanhos enormes em termos de número de parâmetros e dados de treinamento. Esse escalonamento massivo levou a habilidades emergentes notáveis, como a capacidade de seguir instruções complexas, gerar texto muito fluente e realizar tarefas com pouca ou nenhuma exemplificação prévia (few-shot/zero-shot learning). Eles são a base de chatbots como ChatGPT, Gemini e Claude.
+:::
 
 ## GANs (Redes Generativas Adversariais)
 
+![](imgs/gan_faces.png)
+
+## GANs (Redes Generativas Adversariais)
+
+![](imgs/gan.png)
+
+## GANs (Redes Generativas Adversariais)
+
+ - Conceito: Duas redes neurais competindo:
+    - Gerador (Generator): Tenta criar dados sintéticos (ex: imagens falsas) que pareçam reais. Começa a partir de um vetor de ruído aleatório.
+    - Discriminador (Discriminator): Tenta distinguir entre dados reais (do dataset de treino) e dados falsos (criados pelo Gerador). É um classificador binário.
+
+## GANs (Redes Generativas Adversariais)
+
+- Treinamento Adversarial:
+    - O Gerador aprende a enganar o Discriminador.
+    - O Discriminador aprende a não ser enganado.
+    - Elas melhoram juntas em um jogo de "gato e rato".
+
+## GANs (Redes Generativas Adversariais)
+
+- Aplicações: Geração de imagens realistas, style transfer, super-resolução, data augmentation.
+- Desafios: Treinamento pode ser instável (mode collapse, non-convergence).
+
+::: notes
+As Redes Generativas Adversariais (Generative Adversarial Networks - GANs) foram uma das primeiras técnicas a gerar imagens realistas. A ideia é colocar duas redes em competição. O Gerador cria amostras falsas, e o Discriminador tenta identificar se uma amostra é real ou falsa. O Gerador é treinado para maximizar a probabilidade de o Discriminador classificar suas saídas como reais, enquanto o Discriminador é treinado para classificar corretamente. Esse processo adversarial força o Gerador a produzir amostras cada vez mais indistinguíveis das reais. Embora poderosas, as GANs podem ser difíceis de treinar.
+:::
+
+## VAEs
+
+![VAE](imgs/vae.png)
+
+## Modelos de Difusão
+
+![U-NET](imgs/unet.png)
+
+## Modelos de Difusão
+
+- Conceito: Geram dados (principalmente imagens) aprendendo a reverter um processo de adição de ruído.
+
+## Modelos de Difusão
+
+
+- Processo:
+    - Forward Process (Noising): Gradualmente adiciona ruído Gaussiano a uma imagem real ao longo de vários passos, até que se torne puro ruído.
+    - Reverse Process (Denoising): Treina uma rede neural (geralmente uma U-Net) para prever e remover o ruído adicionado em cada passo, começando de um ruído aleatório e gradualmente reconstruindo uma imagem coerente.
+
+## Modelos de Difusão
+
+- Qualidade: Produzem imagens de altíssima qualidade e realismo.
+- Controle: Podem ser condicionados por texto (text-to-image) ou outras imagens.
+- Exemplos: DALL-E 2/3, Stable Diffusion, Midjourney, Imagen.
+
+::: notes
+Os Modelos de Difusão se tornaram a técnica dominante para geração de imagens de alta qualidade. A ideia central é engenhosa: primeiro, eles aprendem como destruir sistematicamente a informação em uma imagem adicionando ruído (processo forward, que é fácil de definir). Depois, eles treinam uma rede neural para fazer o processo inverso: começar com puro ruído e, passo a passo, remover o ruído de forma inteligente para gerar uma imagem realista (processo reverse, que é difícil e requer aprendizado). Ao condicionar o processo de denoising a um prompt de texto, obtemos os poderosos modelos text-to-image.
+:::
+
+
+
 ## Diferenças entre LLMs, GANs e Modelos de Difusão
 
-## Aplicações de IA Generativa
+```Markdown
+| Característica        | LLMs (Transformers)                   | Modelos de Difusão                            | GANs                                         |
+|-----------------------|----------------------------------------|------------------------------------------------|----------------------------------------------|
+| Domínio Principal     | Texto, Código                          | Imagens (alta qualidade), Áudio                | Imagens, Vídeo, Dados Tabulares              |
+| Mecanismo Base        | Auto-atenção, Predição Autoregressiva  | Reversão de processo de ruído (Denoising)     | Competição Gerador vs Discriminador          |
+| Qualidade (Imagem)    | N/A (para texto é alta)                | Muito Alta                                     | Alta (mas pode ter artefatos)                |
+| Estabilidade Treino   | Geralmente estável (custoso)           | Geralmente estável                             | Pode ser instável (mode collapse)            |
+| Controle Geração      | Prompt de texto                        | Prompt de texto, Imagem                        | Vetor Latente, Condicionamento               |
+| Velocidade Geração    | Rápida (paralelizável)                 | Lenta (múltiplos passos de denoising)          | Rápida (um passo do gerador)                 |
+```
 
-## Casos de Uso em Recomendação
+::: notes
 
-## Casos de Uso em Predição
+Embora todos sejam modelos generativos, existem diferenças importantes:
 
-## Casos de Uso em Automação
+LLMs são baseados em Transformers e dominam tarefas de texto devido à sua capacidade de lidar com sequências longas e atenção.
+Modelos de Difusão se destacam na geração de imagens de alta fidelidade, através de um processo iterativo de denoising, mas podem ser lentos para gerar.
+GANs usam um treinamento adversarial único, são rápidas na geração (após treinadas), mas podem ser instáveis para treinar e às vezes sofrem de "mode collapse" (geram pouca variedade). A escolha entre eles depende da tarefa, do tipo de dados e dos requisitos de qualidade e velocidade. 
 
-## Casos de Uso em Criação de Conteúdo
+:::
+
+
 
 ## Desafios e Limitações da IA
 
+Apesar dos avanços impressionantes, a IA (incluindo ML, DL e Generativa) ainda enfrenta desafios significativos:
+
+- Complexidade e Interpretabilidade ("Black Box")
+- Viés e Justiça
+- Privacidade e Segurança
+- Robustez e Generalização
+ - Ética e Impacto Social
+
+::: notes
+É crucial reconhecer que a IA não é uma solução mágica e possui limitações e desafios importantes. Ignorar esses desafios pode levar a falhas, injustiças e consequências negativas. Vamos abordar alguns dos principais.
+:::
+
+
 ## IA Explicável (XAI)
+
+- Problema: Modelos complexos (Deep Learning, LLMs) funcionam como "caixas-pretas" - é difícil entender por que eles tomam uma decisão específica.
+- Objetivo (XAI): Desenvolver técnicas para tornar as previsões e decisões dos modelos de IA compreensíveis para humanos.
+
+## IA Explicável (XAI)
+
+- Importância:
+    - Confiança: Usuários precisam confiar nas decisões (ex: diagnóstico médico).
+    - Debugging: Entender por que um modelo falha.
+    - Justiça (Fairness): Verificar se o modelo não usa vieses indesejados.
+    - Conformidade (Compliance): Regulamentações (como GDPR) podem exigir explicabilidade.
+- Técnicas: SHAP, LIME, Mapas de Atenção, Contrafactuais.
+
+::: notes
+Um grande desafio, especialmente com redes neurais profundas e LLMs, é a falta de transparência. Por que o modelo recomendou este produto? Por que ele negou o crédito? Por que ele gerou essa resposta específica? A IA Explicável (XAI) busca responder a essas perguntas, fornecendo insights sobre o funcionamento interno dos modelos. Isso é vital para construir confiança, depurar erros, garantir a justiça e cumprir regulamentações.
+:::
 
 ## Viés Algorítmico
 
+- Problema: Modelos de IA aprendem a partir de dados, e se os dados refletem vieses históricos ou sociais (de gênero, raça, etc.), o modelo aprenderá e poderá até amplificar esses vieses.
+
+## Viés Algorítmico
+
+
+- Consequências: Resultados injustos ou discriminatórios em áreas críticas como contratação, concessão de crédito, reconhecimento facial, justiça criminal.
+- Fontes de Viés: Dados de treinamento desbalanceados ou tendenciosos, escolhas de features, design do algoritmo.
+
+## Viés Algorítmico
+
+- Mitigação:
+    - Curadoria cuidadosa e auditoria dos dados.
+    - Uso de métricas de justiça (fairness metrics).
+    - Algoritmos "conscientes da justiça" (fairness-aware algorithms).
+    - Pós-processamento das saídas do modelo.
+
+::: notes
+O viés algorítmico é uma preocupação séria. Os modelos não são inerentemente neutros; eles refletem o mundo (e os dados) com os quais foram treinados. Se esses dados contêm preconceitos, o modelo os aprenderá. Isso pode levar a sistemas que perpetuam ou até pioram as desigualdades existentes. Combater o viés exige um esforço consciente em todas as etapas do desenvolvimento do modelo, desde a coleta de dados até a avaliação e o monitoramento contínuo.
+:::
+
 ## Privacidade e Segurança
+
+- Privacidade:
+    - Dados de Treinamento: Modelos (especialmente LLMs) são treinados com grandes volumes de dados, que podem conter informações pessoais ou sensíveis.
+    - Risco de Memorização: Modelos podem "memorizar" partes dos dados de treinamento e revelá-las inadvertidamente em suas saídas.
+
+## Privacidade e Segurança
+
+- Privacidade:
+    - Ataques de Inferência: Tentativas de extrair informações privadas sobre os dados de treinamento a partir das previsões do modelo.
+    - Soluções: Privacidade Diferencial, Aprendizado Federado, Anonimização de dados.
+
+## Privacidade e Segurança
+
+- Segurança:
+    - Ataques Adversariais: Pequenas perturbações (imperceptíveis para humanos) na entrada podem fazer o modelo errar completamente (ex: classificar um sinal de "Pare" como "Limite de Velocidade").
+
+## Privacidade e Segurança
+
+- Segurança:
+    - Envenenamento de Dados (Data Poisoning): Inserir dados maliciosos no conjunto de treinamento para corromper o modelo.
+    - Roubo de Modelo: Extrair a funcionalidade de um modelo proprietário através de consultas.
+
+::: notes
+A IA também levanta questões significativas de privacidade e segurança. Como garantir que dados sensíveis usados no treinamento não sejam expostos? Como proteger os modelos contra ataques maliciosos que visam enganá-los ou roubá-los? Técnicas como Privacidade Diferencial buscam proteger a privacidade individual nos dados, enquanto a pesquisa em segurança se concentra em tornar os modelos mais robustos contra ataques adversariais e outras ameaças.
+:::
 
 ## Generalização e Robustez dos Modelos
 
-## Considerações Éticas em IA
+- Generalização: A capacidade do modelo de performar bem em dados novos e não vistos durante o treinamento. Um modelo que apenas memoriza os dados de treino (overfitting) não generaliza bem.
+
+## Generalização e Robustez dos Modelos
+
+
+- Robustez: A capacidade do modelo de manter seu desempenho mesmo quando confrontado com:
+    - Pequenas Perturbações: Como nos ataques adversariais.
+    - Mudanças na Distribuição dos Dados (Domain Shift): O mundo real muda, e os dados podem começar a parecer diferentes daqueles com os quais o modelo foi treinado (ex: um modelo treinado no verão pode performar mal no inverno).
+
+## Generalização e Robustez dos Modelos
+
+- Desafio: Modelos atuais, apesar de poderosos, podem ser frágeis e sensíveis a pequenas mudanças ou a dados ligeiramente fora da distribuição de treinamento.
+
+::: notes
+Um bom modelo de ML não deve apenas acertar nos dados que viu, mas também generalizar para novos dados. O overfitting (ajuste excessivo aos dados de treino) é um problema clássico. Além disso, a robustez é crucial. Queremos modelos que não sejam facilmente enganados por pequenas alterações na entrada e que continuem funcionando razoavelmente bem mesmo quando os dados do mundo real mudam um pouco em relação aos dados de treinamento. Garantir generalização e robustez ainda são áreas ativas de pesquisa.
+:::
+
+
 
 ## Futuro do Machine Learning e IA Generativa
 
+- Fundamentos Permanecem
+- Convergência e Hibridização
+- Multimodalidade
+- Eficiência
+- Raciocínio, Planejamento e Ferramentas
+- PINNs
 
-## IA Generativa
+::: notes
+
+Fundamentos Permanecem: ML Clássico (supervisionado, não-supervisionado) e Deep Learning (CNNs, RNNs, etc.) continuam sendo a base sobre a qual a IA Generativa é construída. Entender esses fundamentos é crucial.
+Convergência e Hibridização: Veremos mais modelos que combinam técnicas (ex: LLMs usando ferramentas de ML clássico, modelos generativos para data augmentation em tarefas supervisionadas).
+Multimodalidade: Modelos que entendem e geram múltiplos tipos de dados simultaneamente (texto, imagem, áudio, vídeo) como Gemini, GPT-4V.
+Eficiência: Foco em modelos menores, mais rápidos e energeticamente eficientes (quantização, destilação, arquiteturas eficientes).
+Raciocínio, Planejamento e Ferramentas: LLMs evoluindo para além da geração de texto, incorporando capacidades de raciocínio mais complexas, planejamento e uso de ferramentas externas (calculadoras, APIs, busca na web, execução de código) -> Agentes.
+Personalização Extrema: IA adaptada às necessidades e contextos individuais.
+Governança e Ética: Necessidade crescente de frameworks robustos para governança, ética e segurança em IA.
+::: 
+
+
+
 
 ## Arquiteturas
 
@@ -827,16 +1230,33 @@ Time Series Air **Quality**
 
 -   [NVLM](https://arxiv.org/abs/2409.11402)
 
+::: notes
+Vamos olhar brevemente para algumas arquiteturas e técnicas mais avançadas que estão impulsionando a IA Generativa, particularmente em torno dos LLMs e da multimodalidade.
+:::
+
 ## RAG
 
-Ingestão de documentos - [Docling](https://github.com/docling-project/docling)
+- Problema: LLMs "puros" podem alucinar (inventar fatos) e seu conhecimento é limitado aos dados de treinamento (podem estar desatualizados).
+- Solução RAG: Combina um LLM pré-treinado com um mecanismo de busca/recuperação externo.
 
-## Vector Stores
+## RAG
 
-[Vector Stores](https://docs.llamaindex.ai/en/stable/module_guides/storing/vector_stores/#vector-store-options--feature-support){.uri}
+- Processo:
+    - Usuário faz uma pergunta.
+    - A pergunta é usada para buscar documentos/trechos relevantes em uma base de conhecimento externa (ex: artigos, documentos internos, web).
+    - Os trechos recuperados são adicionados ao prompt original do usuário.
+    - O LLM gera a resposta baseado no prompt aumentado (pergunta + contexto recuperado).
 
-![](imgs/vector_stores.png)
+## RAG
+
+
+- Benefícios: Reduz alucinações, permite usar conhecimento atualizado ou específico de um domínio, possibilita citar fontes.
+- Componentes Chave: Retriever (busca vetorial é comum), LLM.
 
 ::: notes
-Os armazenamentos de vetores contêm vetores de incorporação de blocos de documentos ingeridos (e, às vezes, os blocos de documentos também).
+RAG (Retrieval-Augmented Generation) é uma técnica poderosa para melhorar a confiabilidade e a atualidade das respostas dos LLMs. Em vez de depender apenas do conhecimento interno do modelo (que pode ser limitado ou desatualizado), o RAG primeiro busca informações relevantes em uma base de dados externa (usando técnicas de busca, muitas vezes baseadas em embeddings e vector stores). Essa informação recuperada é então fornecida ao LLM junto com a pergunta original, dando-lhe o contexto necessário para gerar uma resposta mais precisa e fundamentada. Isso é crucial para aplicações empresariais onde a precisão e a capacidade de citar fontes são importantes.
 :::
+
+## Perguntas
+
+![QR Code](imgs/qrcode.png)
