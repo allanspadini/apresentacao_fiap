@@ -1,0 +1,842 @@
+---
+title: "&#8203;"
+title-slide-attributes:
+    data-background-image: imgs\title-slide.svg
+    data-background-size: contain
+    data-background-opacity: "1.0"
+author: "&#8203;"
+format: 
+    revealjs:
+        theme: [default, custom.scss]
+        transition: fade
+        slide-number: true
+        preview-links: true
+        incremental: true
+        embed-resources: false
+        notes: false
+        self-contained-math: true
+---
+
+## ​
+
+::: column-screen-inset
+<iframe src="imgs/apresentacao.html" width="2000px" height="600px">
+
+</iframe>
+:::
+
+## Pergunta
+
+**Machine learning** e **deep learning** ainda são relevantes na era das LLMs?
+
+![](imgs/duvida.jpg)
+
+::: notes
+Para começar essa apresentação eu vou começar com uma pergunta. **Machine learning** e **deep learning** ainda são relevantes na era das LLMs? Pra responder essa pergunta vamos partir do zero. Eu não vou contar a história do machine learning aqui, mas nós vamos entender qual a categorização dessas coisas e que tipo de problemas que elas são capazes de resolver.
+:::
+
+## Qual a organização?
+
+![](imgs/sequencia.svg){fig-align="center",width=270}
+
+::: notes
+O termo IA explodiu nos últimos anos e quando as pessoas estão falando de LLMs ou de IA generativa no geral elas utilizam o termo IA. Mas na prática inteligência artificial é uma área bem abrangente que engloba o machine learning, dentro do machine learning nós métodos específicos que envolvem redes neurais e como consequência o deep learning. E as LLMs e geradores de imagem no geral são modelos de deep learning treinados com um propósito específico. Embora hoje em dia com uso de ferramentas, agentes e memória e raciocínio estejam tentando imitar o que seria o comportamento de uma IA uma inteligência artifical mais geral.
+:::
+
+## O que é o machine learning?
+
+| Renda Mensal (R\$) | Tempo de Relacionamento (meses) | Risco de Inadimplência |
+|-------------------|------------------------------|-----------------------|
+| 2.500              | 8                               | Alto                   |
+| 4.800              | 36                              | Baixo                  |
+| 3.200              | 12                              | Médio                  |
+| 8.500              | 60                              | Baixo                  |
+| 1.800              | 3                               | Alto                   |
+| 5.300              | 24                              | Baixo                  |
+
+::: notes
+Mas a essência de tudo é o machine learning. No machine learning nós utilizamos técnicas que permitem que os computadores aprendam sem serem explicitamente programados. Por exemplo, eu não tenho uma regra pré definida que eu consiga aplicar pra resolver o problema dessa tabela de me dizer se o risco de inadinplência de um cliente de um banco é alto ou baixo. Porém, existem algoritmos que se eu passar cada um desses exemplos eles vão ser capazes de começar a identificar padrões e posteriormente fazer a classificação dos clientes quando passar um cliente novo. Ou seja, o algoritmo não apenas memorizar esses exemplos, mas também vai generalizar de forma que quando eu passar um exemplo novo de clientes que tem características um pouquinho diferentes ele também vai conseguir classificar os clientes.
+:::
+
+## Subdivisões do Machine learning
+
+-   Aprendizado supervisionado
+
+-   Aprendizado não-supervisionado
+
+-   Aprendizagem por reforço
+
+::: notes
+E o machine learning pode ser subdividido em três categorias principais que seriam o Aprendizado supervisionado, Aprendizado não-supervisionado, Aprendizagem por reforço.
+:::
+
+------------------------------------------------------------------------
+
+## Aprendizado supervisionado
+
+::: column-screen-inset
+<iframe src="imgs/supervisionado.html" width="2000px" height="600px">
+
+</iframe>
+:::
+
+::: notes
+No aprendizado supervisionado nós temos ainda a regressão e a classificação. Na regressão o objetivo é prever um valor contínuo e na classificação separar as classes como no exemplo que eu já citei.
+:::
+
+## Regressão {auto-animate="true"}
+
+```{python}
+import numpy as np
+import pandas as pd
+import plotly.express as px
+
+# Parâmetros
+np.random.seed(42)
+meses = pd.date_range(start='2022-01-01', end='2024-12-01', freq='MS')
+n = len(meses)
+
+# Tendência de crescimento linear
+tendencia = np.linspace(10000, 40000, n)
+
+# Sazonalidade anual (picos em dezembro)
+sazonalidade = 5000 * np.sin(2 * np.pi * (meses.month - 1) / 12)
+
+# Ruído aleatório
+ruido = np.random.normal(0, 1500, n)
+
+# Receita simulada
+receita = tendencia + sazonalidade + ruido
+
+# DataFrame
+df = pd.DataFrame({
+    'Mês': meses,
+    'Receita Mensal (R$)': receita
+})
+
+# Gráfico
+fig = px.scatter(df, x='Mês', y='Receita Mensal (R$)', 
+                 title='Receita Mensal de uma Loja Online (2022-2024)',
+                 labels={'Receita Mensal (R$)': 'Receita Mensal (R$)'},
+                 )
+
+fig.update_traces(marker=dict(size=8, color='royalblue'))
+fig.show()
+
+
+```
+
+::: notes
+E aí a regressão é um ótimo ponto de partida pra que nós possamos começar a entender como funciona a generalização de um método de machine learning. Vamos pegar esse exemplo onde queremos em um dia x intermediário entre dezembro e janeiro de 2023.
+:::
+
+## Regressão {auto-animate="true"}
+
+```{python}
+import numpy as np
+import pandas as pd
+import plotly.express as px
+
+# Parâmetros
+np.random.seed(42)
+meses = pd.date_range(start='2022-01-01', end='2024-12-01', freq='MS')
+n = len(meses)
+
+# Tendência de crescimento linear
+tendencia = np.linspace(10000, 40000, n)
+
+# Sazonalidade anual (picos em dezembro)
+sazonalidade = 5000 * np.sin(2 * np.pi * (meses.month - 1) / 12)
+
+# Ruído aleatório
+ruido = np.random.normal(0, 1500, n)
+
+# Receita simulada
+receita = tendencia + sazonalidade + ruido
+
+# DataFrame
+df = pd.DataFrame({
+    'Mês': meses,
+    'Receita Mensal (R$)': receita
+})
+
+# Gráfico
+fig = px.scatter(df, x='Mês', y='Receita Mensal (R$)', 
+                 title='Receita Mensal de uma Loja Online (2022-2024)',
+                 labels={'Receita Mensal (R$)': 'Receita Mensal (R$)'},
+                 trendline="ols")
+
+fig.update_traces(marker=dict(size=8, color='royalblue'))
+for trace in fig.data:
+    if trace.mode == 'lines':
+        trace.line.color = 'red'
+fig.show()
+
+
+```
+
+::: notes
+Pra fazer isso eu posso muito bem ajustar uma reta a esses dados.
+:::
+
+## Regressão
+
+::: fragment
+$$
+y = a \cdot x +b 
+$$
+:::
+
+::: fragment
+$$
+y = 0.00028 \cdot x -452196 
+$$
+:::
+
+::: notes
+Quando eu ajusto uma reta aos dados eu estou calculando os coeficientes dessa reta. De forma que tendo os coeficientes eu consigo fazer uma estimativa dos valores intermediários ou até uma tentativa de extrapolação fazendo uma projeção da reta para o futuro. Já que nesse caso nos estamos com um caso particular de regressão que envolve uma série temporal. Ou seja, ajustando a reta e determinando os coeficientes estamos conseguindo generalizar o problema e calcular o valor da receita mesmo em datas onde não coletamos o valor da receita.
+:::
+
+## Regressão
+
+```{python}
+import numpy as np
+import pandas as pd
+import plotly.graph_objects as go
+
+# Parâmetros
+np.random.seed(42)
+meses = pd.date_range(start='2022-01-01', end='2024-12-01', freq='MS')
+n = len(meses)
+
+# Tendência de crescimento linear
+tendencia = np.linspace(10000, 40000, n)
+
+# Sazonalidade anual (picos em dezembro)
+sazonalidade = 5000 * np.sin(2 * np.pi * (meses.month - 1) / 12)
+
+# Ruído aleatório
+ruido = np.random.normal(0, 1500, n)
+
+# Receita simulada
+receita = tendencia + sazonalidade + ruido
+
+# DataFrame
+df = pd.DataFrame({
+    'Mês': meses,
+    'Receita Mensal (R$)': receita
+})
+
+# Transformando a data em número para ajuste polinomial
+x = np.arange(n)  # pode ser dias ou meses, aqui estamos usando a posição do mês
+y = receita
+
+# Ajuste polinomial de grau 4 (você pode mudar para 3, 5, etc)
+grau = 9
+coef = np.polyfit(x, y, grau)
+polinomio = np.poly1d(coef)
+
+# Valores ajustados pelo polinômio
+y_fit = polinomio(x)
+
+# Gráfico
+fig = go.Figure()
+
+# Pontos reais
+fig.add_trace(go.Scatter(
+    x=df['Mês'], y=y, mode='markers',
+    marker=dict(size=8, color='royalblue'),
+    name='Receita Mensal'
+))
+
+# Curva polinomial ajustada
+fig.add_trace(go.Scatter(
+    x=df['Mês'], y=y_fit, mode='lines',
+    line=dict(color='red', width=3),
+    name=f'Ajuste Polinomial (grau {grau})'
+))
+
+fig.update_layout(
+    title='Receita Mensal de uma Loja Online (2022-2024) com Ajuste Polinomial',
+    xaxis_title='Mês',
+    yaxis_title='Receita Mensal (R$)'
+)
+
+fig.show()
+
+```
+
+::: notes
+É claro que podemos ver que a reta talvez não seja a melhor solução para esse caso. Poderia ajustar um polinômio talvez.
+:::
+
+## Classificação
+
+```{python}
+import numpy as np
+import pandas as pd
+import plotly.express as px
+
+np.random.seed(42)
+n = 100
+desconto = np.random.uniform(0, 50, n)
+
+def sigmoid(x):
+    return 1 / (1 + np.exp(-(x-25)/5))
+
+prob_compra = sigmoid(desconto)
+classe = np.random.binomial(1, prob_compra)
+
+df = pd.DataFrame({'Desconto (%)': desconto, 'Comprou': classe})
+
+# Converta a coluna para string para garantir que seja categórica
+df['Comprou'] = df['Comprou'].astype(str)
+
+fig = px.scatter(
+    df, x='Desconto (%)', y='Comprou',
+    color='Comprou',
+    color_discrete_map={'0': 'red', '1': 'blue'},
+    category_orders={'Comprou': ['1', '0']},  # Ordem correta: 0 embaixo, 1 em cima
+    title='Probabilidade de Compra em Função do Desconto',
+    labels={'Comprou': 'Classe (0=Não comprou, 1=Comprou)'}
+)
+
+fig.update_traces(marker=dict(size=10, opacity=0.7, line=dict(width=1, color='black')))
+
+fig.show()
+
+
+```
+
+::: notes
+Já a classificação em um primeiro momento é um pouco mais difícil de pensar como um ajuste de curva aos dados porque estamos tentando separar duas classes diferentes.
+:::
+
+## Classificação
+
+```{python}
+import numpy as np
+import pandas as pd
+import plotly.express as px
+
+np.random.seed(42)
+n = 100
+desconto = np.random.uniform(0, 50, n)
+
+def sigmoid(x):
+    return 1 / (1 + np.exp(-(x-25)/5))
+
+prob_compra = sigmoid(desconto)
+classe = np.random.binomial(1, prob_compra)
+
+df = pd.DataFrame({'Desconto (%)': desconto, 'Comprou': classe})
+
+fig = px.scatter(
+    df, x='Desconto (%)', y='Comprou',
+    color=df['Comprou'].astype(str),
+    color_discrete_map={'0': 'red', '1': 'blue'},
+    title='Probabilidade de Compra em Função do Desconto',
+    labels={'Comprou': 'Classe (0=Não comprou, 1=Comprou)'}
+)
+fig.update_traces(marker=dict(size=10, opacity=0.7, line=dict(width=1, color='black')))
+
+# Adicionando a curva sigmoide
+x_curve = np.linspace(0, 50, 200)
+y_curve = sigmoid(x_curve)
+
+fig.add_scatter(
+    x=x_curve,
+    y=y_curve,
+    mode='lines',
+    name='Curva Sigmoide',
+    line=dict(color='black', width=3)
+)
+
+fig.show()
+
+
+
+```
+
+::: notes
+Mas também podemos ver o problema dessa forma. Nesse caso por exemplo podemos ajustar uma curva do tipo sigmóide.
+:::
+
+## Classificação
+
+```{python}
+import numpy as np
+import pandas as pd
+import plotly.express as px
+
+np.random.seed(42)
+n = 100
+desconto = np.random.uniform(0, 50, n)
+
+def sigmoid(x):
+    return 1 / (1 + np.exp(-(x-25)/5))
+
+prob_compra = sigmoid(desconto)
+classe = np.random.binomial(1, prob_compra)
+
+df = pd.DataFrame({'Desconto (%)': desconto, 'Comprou': classe})
+
+fig = px.scatter(
+    df, x='Desconto (%)', y='Comprou',
+    color=df['Comprou'].astype(str),
+    color_discrete_map={'0': 'red', '1': 'blue'},
+    title='Probabilidade de Compra em Função do Desconto',
+    labels={'Comprou': 'Classe (0=Não comprou, 1=Comprou)'}
+)
+fig.update_traces(marker=dict(size=10, opacity=0.7, line=dict(width=1, color='black')))
+
+# Adicionando a curva sigmoide
+x_curve = np.linspace(0, 50, 200)
+y_curve = sigmoid(x_curve)
+
+fig.add_scatter(
+    x=x_curve,
+    y=y_curve,
+    mode='lines',
+    name='Curva Sigmoide',
+    line=dict(color='black', width=3)
+)
+
+# Adicionando a linha divisória em y=0.5
+fig.add_shape(
+    type="line",
+    x0=0, x1=50,
+    y0=0.5, y1=0.5,
+    line=dict(color="green", width=2, dash="dash"),
+    name='Divisão 0.5'
+)
+
+# Opcional: adicionar anotação indicando o limiar
+fig.add_annotation(
+    x=2, y=0.52,
+    text="Limiar 0.5",
+    showarrow=False,
+    font=dict(color="green", size=12),
+    bgcolor="white"
+)
+
+fig.show()
+
+```
+
+::: notes
+e depois definir em que nível de diferença dos valores da sigmóide vamos separar os dados.
+:::
+
+## Classificação
+
+\$\$ 
+
+\sigma(\mathbf{x}) = \frac{1}{1 + e^{-(w^T \mathbf{x} + b)}}
+
+\$\$
+
+## Aprendizado supervisionado
+
+[Scikit-learn](https://scikit-learn.org/stable/supervised_learning.html)
+
+::: notes
+É claro que esses são apenas alguns dos métodos disponíveis para regressão e classificação se entrarmos por exemplo na página da sklearn vamos ver inúmeros outros métodos que vão ser mais ou menos eficientes para se ajustar a tipos de dados diferentes de n tipos de problemas de regressão e classificação.
+:::
+
+## Aprendizado supervisionado
+
+| Id  | Idade | IMC  | Glicose | Pressão | Diabetes 🎯 |
+|-----|-------|------|---------|---------|-------------|
+| 1   | 45    | 29.0 | 130     | 80      | ✅ Sim      |
+| 2   | 34    | 22.5 | 98      | 70      | ❌ Não      |
+| 3   | 54    | 31.2 | 145     | 85      | ✅ Sim      |
+| 4   | 29    | 24.1 | 92      | 75      | ❌ Não      |
+| 5   | 62    | 33.8 | 160     | 90      | ✅ Sim      |
+
+::: notes
+Ainda nos problemas de apredizagem supervisionado, a característica mais importante é que nesses problemas eu tenho um alvo. Por exemplo nesse caso eu tenho a classe se a pessoa tem ou não diabetes, ou no problema financeiro de regressão eu tenho os valores monetários para cada data. O que é importante notar é esses valores são valores que aprenda de alguma forma a descobrir quando passo por exemplo as características do paciente ou do problema e pra que ele consiga aprender sobre o problema nós precisamos ter esses valores registrados. Alguém precisou ir lá entrevistar ou avaliar o caso de n pacientes e anotar os pacientes com as características x tem diabetes e os com as características y não, depois os z tem...
+:::
+
+## Detecção de fraude
+
+![Robô cometendo fraude](imgs/fraude.png)
+
+::: notes
+Embora os dados tabulares sejam o exemplo mais simples de dados que nós temos existem muitas aplicações sobre esse tipo de dados. Um exemplo é a detecção de fraude. Modelos supervisionados (como Random Forest, XGBoost) treinados com histórico de transações rotuladas como “fraudulentas” ou “legítimas”.
+:::
+
+## Previsão de churn
+
+``` markdown
+| customer_id | idade | tempo_de_contrato (meses) | valor_mensal | utilizacao_app (dias/mês) | reclamacoes | churn |
+|-------------|-------|--------------------------|--------------|---------------------------|-------------|-------|
+| 001         | 25    | 12                       | 79.90        | 22                        | 0           | 0     |
+| 002         | 42    | 6                        | 99.90        | 10                        | 2           | 1     |
+| 003         | 34    | 24                       | 59.90        | 25                        | 0           | 0     |
+| 004         | 28    | 3                        | 89.90        | 5                         | 1           | 1     |
+| 005         | 50    | 36                       | 49.90        | 30                        | 0           | 0     |
+```
+
+::: notes
+Empresas de SaaS, telecom, bancos e varejo querem prever quais clientes estão propensos a cancelar seus serviços.
+:::
+
+## Otimização de cadeia de suprimentos
+
+``` markdown
+| produto_id | centro_distribuicao | estoque_atual | demanda_prevista | tempo_reposicao (dias) | custo_transporte | prioridade |
+|------------|---------------------|---------------|------------------|-----------------------|------------------|------------|
+| 1001       | SP                  | 150           | 200              | 2                     | 500              | 1          |
+| 1002       | RJ                  | 80            | 60               | 3                     | 400              | 2          |
+| 1003       | MG                  | 50            | 100              | 5                     | 700              | 1          |
+| 1004       | RS                  | 200           | 180              | 4                     | 300              | 3          |
+| 1005       | BA                  | 90            | 120              | 6                     | 600              | 2          |
+```
+
+::: notes
+Previsão de demanda para estoques, logística e produção.
+:::
+
+## Aprendizado não-supervisionado
+
+| Id  | Idade | IMC  | Glicose | Pressão |
+|-----|-------|------|---------|---------|
+| 1   | 45    | 29.0 | 130     | 80      |
+| 2   | 34    | 22.5 | 98      | 70      |
+| 3   | 54    | 31.2 | 145     | 85      |
+| 4   | 29    | 24.1 | 92      | 75      |
+| 5   | 62    | 33.8 | 160     | 90      |
+
+::: notes
+Mas eventualmente nós nos deparamos com problemas que é a primeira vez que nós estamos vendo. Nós nem sequer sabemos que a diabetes existe, por exemplo. Mas aí nos nossos registros médicos vamos anotando os dados das pessoas e vamos percebendo algumas características.
+:::
+
+## Clustering
+
+```{python}
+
+import pandas as pd
+import plotly.express as px
+from sklearn.datasets import make_blobs
+
+# Gerar dados sintéticos com 2 clusters
+X, y = make_blobs(n_samples=100, centers=2, cluster_std=2.5, random_state=42)
+
+# Ajustar os valores para simular IMC e Glicose em faixas realistas
+# IMC: entre 18 e 40, Glicose: entre 70 e 200
+IMC = 18 + (X[:, 0] - X[:, 0].min()) * (40 - 18) / (X[:, 0].max() - X[:, 0].min())
+Glicose = 70 + (X[:, 1] - X[:, 1].min()) * (200 - 70) / (X[:, 1].max() - X[:, 1].min())
+
+# Criar DataFrame
+df = pd.DataFrame({
+    'IMC': IMC,
+    'Glicose': Glicose,
+    'Grupo': ['Grupo 1' if label == 0 else 'Grupo 2' for label in y]
+})
+
+# Plot com Plotly
+fig = px.scatter(
+    df, x='IMC', y='Glicose',
+    color='Grupo',
+    title='Clustering Simulado: IMC vs Glicose',
+    labels={'IMC': 'IMC', 'Glicose': 'Glicose'}
+)
+fig.show()
+
+
+
+```
+
+::: notes
+E aí um primeiro tipo de algoritmo bastanta conhecido seria um algoritmo de clustering e esse algoritmo ajudaria a gente a tentar discernir algo em cima dos dados. Eventualmente ajudando na análise exploratória e indicando de que forma poderíamos anotar esses dados trasnformando o problema em um problema supervisionado em algum momento.
+:::
+
+## PCA
+
+```{python}
+import pandas as pd
+import plotly.express as px
+from sklearn.datasets import load_iris
+from sklearn.decomposition import PCA
+
+# Carregar um conjunto de dados de exemplo (Iris)
+data = load_iris()
+X = data.data
+y = data.target
+target_names = data.target_names
+
+# Aplicar PCA para reduzir para 2 dimensões
+pca = PCA(n_components=2)
+X_pca = pca.fit_transform(X)
+
+# Criar DataFrame para plotagem
+df = pd.DataFrame({
+    'PC1': X_pca[:, 0],
+    'PC2': X_pca[:, 1],
+    'Classe': [target_names[i] for i in y]
+})
+
+# Plot com Plotly
+fig = px.scatter(
+    df, x='PC1', y='PC2',
+    color='Classe',
+    title='PCA: Projeção dos Dados nos Dois Primeiros Componentes',
+    labels={'PC1': 'Componente Principal 1', 'PC2': 'Componente Principal 2'}
+)
+fig.show()
+
+```
+
+::: notes
+O **PCA (Análise de Componentes Principais)** é um algoritmo de aprendizado não-supervisionado usado para reduzir a dimensionalidade dos dados, transformando variáveis originais em novas variáveis (componentes principais) que capturam a maior parte da variância presente nos dados, facilitando visualização e análise de padrões.
+:::
+
+## Aplicações
+
+-   Segmentação de clientes
+
+-   Detecção de anomalias
+
+-   Agrupamento de textos
+
+-   Descoberta de padrões de consumo (regras de associação)
+
+## Aprendizagem por reforço
+
+![Genshin Impact](https://mygear.vn/media/lib/05-12-2022/ge4.jpg)
+
+::: notes
+Aprendizagem por reforço é uma técnica em que um agente aprende a tomar decisões sequenciais ao interagir com um ambiente, recebendo recompensas ou punições para maximizar seu desempenho ao longo do tempo.
+:::
+
+## Aprendizagem por reforço
+
+![Aprendizagem por reforço](imgs/reforco.png)
+
+::: notes
+Aprendizagem por reforço é uma técnica em que um agente aprende a tomar decisões sequenciais ao interagir com um ambiente, recebendo recompensas ou punições para maximizar seu desempenho ao longo do tempo.
+:::
+
+## Perceptron
+
+::: column-screen-inset
+<iframe src="imgs/perceptron.html" width="2000px" height="600px">
+
+</iframe>
+:::
+
+## Perceptron
+$$
+\hat{y} = f\left( \sum_{i=0}^{m} w_i x_i \right)
+$$
+
+## Redes Neurais Profundas
+
+::: column-screen-inset
+<iframe src="imgs/profunda.html" width="2000px" height="600px">
+
+</iframe>
+:::
+
+## Treinando uma rede
+
+::: column-screen-inset
+<iframe src="imgs/rede_neural.html" width="2000px" height="600px">
+
+</iframe>
+:::
+
+
+## Propagação 
+
+
+| Id  | Idade | IMC  | Glicose | Pressão | Diabetes 🎯 |
+|-----|-------|------|---------|---------|-------------|
+| 1   | 45    | 29.0 | 130     | 80      | ✅ Sim      |
+| 2   | 34    | 22.5 | 98      | 70      | ❌ Não      |
+| 3   | 54    | 31.2 | 145     | 85      | ✅ Sim      |
+| 4   | 29    | 24.1 | 92      | 75      | ❌ Não      |
+| 5   | 62    | 33.8 | 160     | 90      | ✅ Sim      |
+
+## Retropropagação
+
+::: column-screen-inset
+<iframe src="imgs/retro.html" width="2000px" height="600px">
+
+</iframe>
+:::
+
+## Arquiteturas de Redes Neurais
+
+![https://www.asimovinstitute.org/neural-network-zoo/](https://www.asimovinstitute.org/wp-content/uploads/2019/04/NeuralNetworkZo19High.png)
+
+## Redes Neurais Convolucionais (CNNs)
+
+![](imgs/oia.png)
+
+## Redes Neurais Convolucionais (CNNs)
+
+![](imgs/oia_vermelho.png)
+
+## Redes Neurais Convolucionais (CNNs)
+
+![https://alexlenail.me/NN-SVG/LeNet.html](imgs/convolucional.png)
+
+## Visão Computacional para Indústria 4.0
+
+![https://www.kaggle.com/datasets/salmaneunus/railway-track-fault-detection](imgs/trilho.jpg)
+
+## Saúde
+
+![https://www.kaggle.com/datasets/paultimothymooney/chest-xray-pneumonia](imgs/medical.jpeg)
+
+## Sustentabilidade e Meio Ambiente
+
+![https://www.kaggle.com/datasets/akhilchibber/deforestation-detection-dataset](imgs/floresta.jpg)
+
+## Detecção de objetos - Agricultura
+
+![https://www.kaggle.com/datasets/trainingdatapro/ripe-strawberries-detection](imgs/morangos.png)
+
+## Segmentação de objetos
+
+![https://www.sciencedirect.com/science/article/abs/pii/S0926985117307632](imgs/salt.jpg)
+
+## Transferência de aprendizado
+
+![https://www.cs.toronto.edu/~kriz/cifar.html](imgs/cifar10.png)
+
+## Transferência de aprendizado
+
+- Fine-tuning
+
+::: notes
+
+Como funciona: Um modelo pré-treinado em uma tarefa grande (ex: ImageNet para imagens, ou Wikipedia para texto) tem suas camadas finais ajustadas (ou toda a rede é re-treinada com uma taxa de aprendizado menor) para uma nova tarefa específica.
+Exemplo: Pegar um ResNet treinado para classificar 1000 objetos e ajustar para detectar tipos de defeitos em peças industriais.
+
+:::
+
+## Transferência de aprendizado
+
+- Fine-tuning
+
+- Transferência de domínio 
+
+::: notes
+
+Como funciona: O modelo é treinado em um domínio (ex: fotos de câmeras profissionais) e depois adaptado para outro (ex: imagens de celulares), geralmente usando técnicas para reduzir a diferença entre os domínios.
+Exemplo: Treinar um modelo de reconhecimento facial em fotos de estúdio e adaptá-lo para funcionar em selfies.
+
+:::
+
+## Redes Neurais Recorrentes (RNNs)
+
+::: column-screen-inset
+<iframe src="imgs/rnn.html" width="2000px" height="600px">
+
+</iframe>
+:::
+
+## Redes Neurais Recorrentes (RNNs)
+
+ - LSTM (Long Short-Term Memory)
+
+ - GRU ( Gated Recurrent Unit )
+
+## Séries temporais
+
+![https://www.kaggle.com/datasets/abhisheksjha/time-series-air-quality-data-of-india-2010-2023/data](imgs/timeseries.png)
+
+## IoT e sensores
+
+![](imgs/watch.jpg)
+
+## Completação de texto ou código
+
+Time Series Air **Quality**
+
+## Recursos
+
+- [HuggingFace](https://huggingface.co)
+
+- [Kaggle](https://www.kaggle.com)
+
+- [PapersWithCode](https://paperswithcode.com)
+
+## FrameWorks
+
+- [TensorFlow](https://www.tensorflow.org)
+
+- [Pytorch](https://pytorch.org)
+
+- [HuggingFace](https://huggingface.co/docs)
+
+- [Jax](https://docs.jax.dev/en/latest/quickstart.html)
+
+
+## Transformers
+
+## Aplicações de Transformers
+
+## Inteligência Artificial Generativa
+
+## O que é Generative AI?
+
+## LLMs (Large Language Models)
+
+## Modelos de Difusão
+
+## GANs (Redes Generativas Adversariais)
+
+## Diferenças entre LLMs, GANs e Modelos de Difusão
+
+## Aplicações de IA Generativa
+
+## Casos de Uso em Recomendação
+
+## Casos de Uso em Predição
+
+## Casos de Uso em Automação
+
+## Casos de Uso em Criação de Conteúdo
+
+## Desafios e Limitações da IA
+
+## IA Explicável (XAI)
+
+## Viés Algorítmico
+
+## Privacidade e Segurança
+
+## Generalização e Robustez dos Modelos
+
+## Considerações Éticas em IA
+
+## Futuro do Machine Learning e IA Generativa
+
+
+## IA Generativa
+
+## Arquiteturas
+
+-   [Flamingo](https://arxiv.org/abs/2204.14198)
+
+-   [Perceiver IO](https://arxiv.org/abs/2107.14795)
+
+-   [NVLM](https://arxiv.org/abs/2409.11402)
+
+## RAG
+
+Ingestão de documentos - [Docling](https://github.com/docling-project/docling)
+
+## Vector Stores
+
+[Vector Stores](https://docs.llamaindex.ai/en/stable/module_guides/storing/vector_stores/#vector-store-options--feature-support){.uri}
+
+![](imgs/vector_stores.png)
+
+::: notes
+Os armazenamentos de vetores contêm vetores de incorporação de blocos de documentos ingeridos (e, às vezes, os blocos de documentos também).
+:::
