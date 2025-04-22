@@ -1126,57 +1126,11 @@ Apesar dos avanços impressionantes, a IA (incluindo ML, DL e Generativa) ainda 
 - Técnicas: SHAP, LIME, Mapas de Atenção, Contrafactuais.
 
 ::: notes
+
 Um grande desafio, especialmente com redes neurais profundas e LLMs, é a falta de transparência. Por que o modelo recomendou este produto? Por que ele negou o crédito? Por que ele gerou essa resposta específica? A IA Explicável (XAI) busca responder a essas perguntas, fornecendo insights sobre o funcionamento interno dos modelos. Isso é vital para construir confiança, depurar erros, garantir a justiça e cumprir regulamentações.
+
 :::
 
-## Viés Algorítmico
-
-- Problema: Modelos de IA aprendem a partir de dados, e se os dados refletem vieses históricos ou sociais (de gênero, raça, etc.), o modelo aprenderá e poderá até amplificar esses vieses.
-
-## Viés Algorítmico
-
-
-- Consequências: Resultados injustos ou discriminatórios em áreas críticas como contratação, concessão de crédito, reconhecimento facial, justiça criminal.
-- Fontes de Viés: Dados de treinamento desbalanceados ou tendenciosos, escolhas de features, design do algoritmo.
-
-## Viés Algorítmico
-
-- Mitigação:
-    - Curadoria cuidadosa e auditoria dos dados.
-    - Uso de métricas de justiça (fairness metrics).
-    - Algoritmos "conscientes da justiça" (fairness-aware algorithms).
-    - Pós-processamento das saídas do modelo.
-
-::: notes
-O viés algorítmico é uma preocupação séria. Os modelos não são inerentemente neutros; eles refletem o mundo (e os dados) com os quais foram treinados. Se esses dados contêm preconceitos, o modelo os aprenderá. Isso pode levar a sistemas que perpetuam ou até pioram as desigualdades existentes. Combater o viés exige um esforço consciente em todas as etapas do desenvolvimento do modelo, desde a coleta de dados até a avaliação e o monitoramento contínuo.
-:::
-
-## Privacidade e Segurança
-
-- Privacidade:
-    - Dados de Treinamento: Modelos (especialmente LLMs) são treinados com grandes volumes de dados, que podem conter informações pessoais ou sensíveis.
-    - Risco de Memorização: Modelos podem "memorizar" partes dos dados de treinamento e revelá-las inadvertidamente em suas saídas.
-
-## Privacidade e Segurança
-
-- Privacidade:
-    - Ataques de Inferência: Tentativas de extrair informações privadas sobre os dados de treinamento a partir das previsões do modelo.
-    - Soluções: Privacidade Diferencial, Aprendizado Federado, Anonimização de dados.
-
-## Privacidade e Segurança
-
-- Segurança:
-    - Ataques Adversariais: Pequenas perturbações (imperceptíveis para humanos) na entrada podem fazer o modelo errar completamente (ex: classificar um sinal de "Pare" como "Limite de Velocidade").
-
-## Privacidade e Segurança
-
-- Segurança:
-    - Envenenamento de Dados (Data Poisoning): Inserir dados maliciosos no conjunto de treinamento para corromper o modelo.
-    - Roubo de Modelo: Extrair a funcionalidade de um modelo proprietário através de consultas.
-
-::: notes
-A IA também levanta questões significativas de privacidade e segurança. Como garantir que dados sensíveis usados no treinamento não sejam expostos? Como proteger os modelos contra ataques maliciosos que visam enganá-los ou roubá-los? Técnicas como Privacidade Diferencial buscam proteger a privacidade individual nos dados, enquanto a pesquisa em segurança se concentra em tornar os modelos mais robustos contra ataques adversariais e outras ameaças.
-:::
 
 ## Generalização e Robustez dos Modelos
 
